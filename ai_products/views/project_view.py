@@ -25,7 +25,7 @@ class CreateProjectAPIView(APIView):
         project = service.create_project(project=project, user=login_user)
         serializer = CreateProjectSerializer(data=project.model_dump())
         if serializer.is_valid():
-            return Response(serializer.validated_data(), status=status.HTTP_201_CREATED)
+            return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             

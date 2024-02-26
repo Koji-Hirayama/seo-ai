@@ -65,3 +65,4 @@ class User(AbstractBaseUser, PermissionsMixin):
             updated_at=self.updated_at,
         )
     
+    

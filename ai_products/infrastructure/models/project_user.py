@@ -32,4 +32,3 @@ class ProjectUser(models.Model):
           )
      
      
-     

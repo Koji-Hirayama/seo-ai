@@ -13,7 +13,7 @@ class GetProjectsForUserAPIView(APIView):
         
         serializer = GetProjectsForUserSerializer(data=project_user_list.model_dump())
         if serializer.is_valid():
-            return Response(serializer.get_data(), status=status.HTTP_200_OK)
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         

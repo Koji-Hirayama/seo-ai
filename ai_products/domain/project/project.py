@@ -11,4 +11,8 @@ class Project(BaseModel):
     updated_at: datetime | None = None
     deleted_at: datetime | None = None
     
+    def add_users(self, users: List[DomainUser]) -> "Project":
+        self.users = users
+        return self
+    
     

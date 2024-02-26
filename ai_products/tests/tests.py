@@ -88,7 +88,7 @@ class GetProjectsForUserAPIViewTestCase(APITestCase):
         test_data = DomainProjectUserLis(project_user_list=list).model_dump()
         serializer = GetProjectsForUserSerializer(data=test_data)
         serializer.is_valid()
-        test_data = GetProjectsForUserSerializer(data=test_data).validated_data()
+        test_data = GetProjectsForUserSerializer(data=test_data).validated_data
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), test_data)

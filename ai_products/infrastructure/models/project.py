@@ -1,6 +1,9 @@
+from typing import List
 from django.db import models
 from ai_products.models import User
 from ai_products.domain.project import Project as DomainProject
+from ai_products.domain.user import User as DomainUser
+from typing import List
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
@@ -29,11 +32,18 @@ class Project(models.Model):
 
     def to_domain(self) -> DomainProject:
         """Djangoモデルからドメインモデルに変換するメソッド"""
+        # (仕様)ManyToManyのデフォルトはNone。(無限ループ防止)
         return DomainProject(
             id=self.id,
             name=self.name,
-            users=[user.to_domain() for user in self.users.all()],
+            users=None,
             created_at=self.created_at,
             updated_at=self.updated_at,
             deleted_at=self.deleted_at,
         )
+    
+    def users_to_user_domain_list(self) -> List[DomainUser]:
+        """ManyToManyのusersをドメインモデルに変換して返す(※プレフェッチ済み推奨)"""
+        return [user.to_domain() for user in self.users.all()]
+    
+        
