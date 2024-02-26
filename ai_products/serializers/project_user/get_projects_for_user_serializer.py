@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from ..custom_serializers import ResponseSerializer
 
 class _UserSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -24,7 +23,7 @@ class _ProjectUserSerializer(serializers.Serializer):
     is_admin = serializers.BooleanField()
     
 
-class GetProjectsForUserSerializer(ResponseSerializer):
+class GetProjectsForUserSerializer(serializers.Serializer):
     project_user_list = _ProjectUserSerializer(many=True)
     
 

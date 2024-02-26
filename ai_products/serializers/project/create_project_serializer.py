@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from ..custom_serializers import ResponseSerializer
 
 # 一旦サンプル
 # class NameVlidate(serializers.Serializer):
@@ -20,7 +19,7 @@ class RequestCreateProjectSerializer(serializers.Serializer):
     #     return NameVlidate.validate(value)
     
 # response用
-class CreateProjectSerializer(ResponseSerializer):
+class CreateProjectSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=255)
     
