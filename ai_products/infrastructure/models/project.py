@@ -12,6 +12,20 @@ class Project(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    @classmethod
+    def from_domain(cls, obj: DomainProject) -> "Project":
+        """ドメインモデルからのファクトリメソッド"""
+        instance = cls(
+            id=obj.id, 
+            name=obj.name, 
+            created_at=obj.created_at,
+            updated_at=obj.updated_at, 
+            deleted_at=obj.deleted_at
+        )
+        # ManyToManyの場合の処理
+        if obj.users is not None:
+            instance.users.set([User.from_domain(user) for user in obj.users])
+        return instance
 
     def to_domain(self) -> DomainProject:
         """Djangoモデルからドメインモデルに変換するメソッド"""

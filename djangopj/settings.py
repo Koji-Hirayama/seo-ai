@@ -117,7 +117,6 @@ DATABASES = {
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         },
-        'ATOMIC_REQUESTS': True,  # 追加
     }
 }
 

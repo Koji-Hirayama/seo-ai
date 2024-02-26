@@ -8,11 +8,12 @@ from ai_products.serializers.project_user import GetProjectsForUserSerializer
 class GetProjectsForUserAPIView(APIView):
     def get(self, request):
         service = ProjectUserListService(ProjectUserRepository())
-        project_user_list = service.get_projects_for_user(request.user.id)
+        login_user = request.user.to_domain()
+        project_user_list = service.get_projects_for_user(login_user)
         
         serializer = GetProjectsForUserSerializer(data=project_user_list.model_dump())
         if serializer.is_valid():
-            data = serializer.validated_data
-            return Response(data, status=status.HTTP_200_OK)
+            return Response(serializer.get_data(), status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        

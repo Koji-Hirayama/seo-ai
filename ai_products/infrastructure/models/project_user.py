@@ -10,6 +10,17 @@ class ProjectUser(models.Model):
      
      def __str__(self) -> str:
           return self.project.name
+     
+     @classmethod
+     def from_domain(cls, obj: DomainProjectUser) -> "ProjectUser":
+          """ドメインモデルからのファクトリメソッド"""
+          instance = cls(
+               id=obj.id, 
+               project=Project.from_domain(obj.project),
+               user=User.from_domain(obj.user),
+               is_admin=obj.is_admin,
+          )
+          return instance
 
      def to_domain(self) -> DomainProjectUser:
           """Djangoモデルからドメインモデルに変換するメソッド"""

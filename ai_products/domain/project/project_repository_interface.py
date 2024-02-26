@@ -4,7 +4,7 @@ from typing import List
 
 class ProjectRepositoryInterface(ABC):
     @abstractmethod
-    def save(self, name:str, user_id:int) -> DomainProject:
+    def save(self, project: DomainProject) -> DomainProject:
         """Projectの作成とProjectUserの紐付け"""
         pass
         
