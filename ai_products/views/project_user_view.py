@@ -4,8 +4,11 @@ from rest_framework import status
 from ai_products.application.service.project_user import ProjectUserListService
 from ai_products.infrastructure.repository.project_user import ProjectUserRepository
 from ai_products.serializers.project_user import GetProjectsForUserSerializer
+from drf_spectacular.utils import extend_schema
 
 class GetProjectsForUserAPIView(APIView):
+    
+    @extend_schema(responses={200: GetProjectsForUserSerializer})
     def get(self, request):
         service = ProjectUserListService(ProjectUserRepository())
         login_user = request.user.to_domain()

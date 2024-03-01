@@ -7,4 +7,9 @@ class ProjectRepositoryInterface(ABC):
     def save(self, project: DomainProject) -> DomainProject:
         """Projectの作成とProjectUserの紐付け"""
         pass
+    
+    
+    @abstractmethod
+    def get_project_with_tasks(self, id:int) -> DomainProject:
+        pass
         

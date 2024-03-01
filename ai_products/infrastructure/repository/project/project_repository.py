@@ -9,3 +9,9 @@ class ProjectRepository(ProjectRepositoryInterface):
         db_project.save()
         
         return db_project.to_domain()
+    
+    
+    def get_project_with_tasks(self, id: int) -> DomainProject:
+        db_project = Project.objects.prefetch_related('tasks').get(id=id)
+        return db_project.to_domain()
+        

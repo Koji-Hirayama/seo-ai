@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'djoser',
     'ai_products.apps.AiProductsConfig',
     'corsheaders',
+    # Swagger(drf_spectacular)を記述
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -92,12 +94,21 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 # simple_wjtのカスタマイズ
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your API Description',
+    'VERSION': '1.0.0',
+    # api/schemaを表示しない
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 
