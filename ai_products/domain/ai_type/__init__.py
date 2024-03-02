@@ -1,1 +1,0 @@
-from .ai_type import AiType

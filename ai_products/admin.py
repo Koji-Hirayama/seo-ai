@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
 from . import models
-from .infrastructure import models as model
+from . import models as model
 
 # Register your models here.
 class UserAdmin(BaseUserAdmin):

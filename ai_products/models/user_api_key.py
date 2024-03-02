@@ -1,5 +1,5 @@
 from django.db import models
-from ai_products.models import User
+from ai_products.models.user import User
 from .api_provider import ApiProvider
 
 class UserApikey(models.Model):

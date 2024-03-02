@@ -1,1 +1,1 @@
-from .get_projects_for_user_serializer import GetProjectsForUserSerializer
+from .get_projects_for_user_serializer import ProjectUserSerializer

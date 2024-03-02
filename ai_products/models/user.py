@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from ai_products.domain.user import User as DomainUser
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -36,33 +35,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-    
-    @classmethod
-    def from_domain(cls, obj: DomainUser) -> "User":
-        """ドメインモデルからのファクトリメソッド"""
-        instance = cls(
-            id=obj.id, 
-            email=obj.email,
-            is_active=obj.is_active,
-            is_staff=obj.is_staff,
-            is_superuser=obj.is_superuser,
-            last_login=obj.last_login,
-            created_at=obj.created_at,
-            updated_at=obj.updated_at,
-        )
-        return instance
-
-    def to_domain(self) -> DomainUser:
-        """Djangoモデルからドメインモデルに変換するメソッド"""
-        return DomainUser(
-            id=self.id,
-            email=self.email,
-            is_active=self.is_active,
-            is_staff=self.is_staff,
-            is_superuser=self.is_superuser,
-            last_login=self.last_login,
-            created_at=self.created_at,
-            updated_at=self.updated_at,
-        )
-    
     

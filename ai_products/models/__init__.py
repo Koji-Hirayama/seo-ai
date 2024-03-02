@@ -16,3 +16,4 @@ from .schedule import Schedule
 from .task import Task
 from .user_api_key import UserApikey
 from .work import Work
+from .user import User
