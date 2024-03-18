@@ -7,10 +7,8 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/v1/', include('ai_products.urls')),
-    path('authen/', include('djoser.urls.jwt')), # token獲得用
-    
+    path("admin/", admin.site.urls),
+    path("api/", include("ai_products.urls")),
     # Swagger関係
     # ! 本番環境では、公開しないように設定する。(リリース時対応)
     # ================================

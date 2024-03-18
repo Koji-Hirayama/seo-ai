@@ -37,78 +37,105 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'djoser',
-    'ai_products.apps.AiProductsConfig',
-    'corsheaders',
-    # Swagger(drf_spectacular)を記述
-    "drf_spectacular",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # 以下プラグイン
+    "rest_framework",  # 追加
+    "djoser",  # 追加
+    "corsheaders",  # 追加
+    "drf_spectacular",  # 追加: Swagger(drf_spectacular)
+    # 以下app
+    "ai_products.apps.AiProductsConfig",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',    # 追加
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",  # 追加
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+# 追加
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:8080",
+    "http://0.0.0.0:8000",
+    "http://0.0.0.0:8080",
 ]
+CORS_ALLOW_CREDENTIALS = True
+# 信頼するホスト名を明記、これをやらないとCORS+DRFでやる場合CSRFエラーが出る
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://localhost:3000"]
 
-ROOT_URLCONF = 'djangopj.urls'
+
+ROOT_URLCONF = "djangopj.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'djangopj.wsgi.application'
+WSGI_APPLICATION = "djangopj.wsgi.application"
 
-# 追記
+# 追加
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "utils.auth.authenticate.CustomJWTAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+# 追加
 # simple_wjtのカスタマイズ
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=3),
+    "AUTH_HEADER_TYPES": ("JWT",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    # cookie settings
+    "AUTH_COOKIE": "accessToken",  # cookie name
+    "AUTH_COOKIE_REFRESH": "refreshToken",  # Cookie name. Enables cookies if value is set.
+    "AUTH_COOKIE_DOMAIN": None,  # specifies domain for which the cookie will be sent
+    # DEBUGがTrueならば、AUTH_COOKIE_SECUREにFalseを入れて、HTTPSを強制しない
+    "AUTH_COOKIE_SECURE": not DEBUG,  # restricts the transmission of the cookie to only occur over secure (HTTPS) connections.
+    "AUTH_COOKIE_HTTP_ONLY": True,  # prevents client-side js from accessing the cookie
+    "AUTH_COOKIE_PATH": "/",  # URL path where cookie will be sent
+    "AUTH_COOKIE_SAMESITE": (
+        "Lax" if DEBUG else "None"
+    ),  # specifies whether the cookie should be sent in cross site requests
 }
 
+# 追加
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your API Description',
-    'VERSION': '1.0.0',
+    "TITLE": "Your Project API",
+    "DESCRIPTION": "Your API Description",
+    "VERSION": "1.0.0",
     # api/schemaを表示しない
-    'SERVE_INCLUDE_SCHEMA': False,
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 
@@ -132,23 +159,21 @@ DATABASES = {
 }
 
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -157,15 +182,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 # 言語を日本語に設定
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = "ja"
 # タイムゾーンをAsia/Tokyoに設定
-TIME_ZONE = 'Asia/Tokyo'
+TIME_ZONE = "Asia/Tokyo"
 
 USE_I18N = True
 
 
+# 追加
 # 独自のユーザーモデル
-AUTH_USER_MODEL = 'ai_products.User'
+AUTH_USER_MODEL = "ai_products.User"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -177,4 +203,4 @@ STATIC_URL = "/static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

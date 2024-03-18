@@ -1,2 +1,0 @@
-from .create_project_serializer import RequestCreateProjectSerializer, CreateProjectSerializer
-from .project_serializer import RequestCreateProjectSerializer, CreateProjectSerializer
