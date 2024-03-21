@@ -18,4 +18,4 @@ class RequestCreateTaskSerializer(RequestErrorSerializer):
 class CreateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ("id", "name", "description", "project", "ai_type")
+        fields = ("id", "name", "description", "ai_type")

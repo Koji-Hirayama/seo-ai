@@ -24,6 +24,8 @@ class CreateProjectAPIView(APIView):
 
         project_name = serializer.validated_data.get("name")
         service = CreateProjectService()
-        project = service.create_project(user=request.user, project_name=project_name)
-        serializer = CreateProjectSerializer(project)
+        project_user = service.create_project(
+            user=request.user, project_name=project_name
+        )
+        serializer = CreateProjectSerializer(project_user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
