@@ -8,7 +8,6 @@ from .project_api_key import ProjectApikey
 from .project_user import ProjectUser
 from .project import Project
 from .prompt_output import PromptOutput
-from .prompt_type import PromptType
 from .prompt import Prompt
 from .schedule_log import ScheduleLog
 from .schedule_type import ScheduleType

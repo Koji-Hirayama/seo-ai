@@ -4,31 +4,31 @@ from django.utils.translation import gettext as _
 from . import models
 from . import models as model
 
+
 # Register your models here.
 class UserAdmin(BaseUserAdmin):
-    ordering = ['id']
-    list_display = ['email']
+    ordering = ["id"]
+    list_display = ["email"]
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal Info'), {'fields': ()}),
+        (None, {"fields": ("email", "password")}),
+        (_("Personal Info"), {"fields": ()}),
         (
-            _('Permissions'),
+            _("Permissions"),
             {
-                'fields': (
-                    'is_active',
-                    'is_staff',
-                    'is_superuser',
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
                 )
-            }
+            },
         ),
-        (_('Important dates'), {'fields': ('last_login',)}),
+        (_("Important dates"), {"fields": ("last_login",)}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')
-        }),
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
     )
+
+
 admin.site.register(models.User, UserAdmin)
 admin.site.register(model.Project)
 admin.site.register(model.ProjectUser)
@@ -40,7 +40,6 @@ admin.site.register(model.Task)
 admin.site.register(model.Work)
 admin.site.register(model.LlmType)
 admin.site.register(model.Llm)
-admin.site.register(model.PromptType)
 admin.site.register(model.Prompt)
 admin.site.register(model.PromptOutput)
 admin.site.register(model.OutputResult)
