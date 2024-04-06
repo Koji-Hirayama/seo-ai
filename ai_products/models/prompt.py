@@ -1,19 +1,23 @@
 from django.db import models
 from .llm import Llm
-from .prompt_type import PromptType
 from .work import Work
+from .user import User
+import datetime
 
 
 class Prompt(models.Model):
-    text = models.TextField()
-    prompt_type = models.ForeignKey(PromptType, on_delete=models.CASCADE, related_name="prompts")
-    order = models.IntegerField()
+    prompt = models.TextField(blank=True, null=True)
+    output_example_model_description = models.CharField(
+        max_length=255, blank=True, null=True
+    )
+    output_example_model = models.JSONField(blank=True, null=True)
     work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name="prompts")
     llm = models.ForeignKey(Llm, on_delete=models.CASCADE, related_name="prompts")
-    text_length = models.IntegerField()
-    token = models.IntegerField()
-    cost = models.FloatField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="prompts")
+    order = models.IntegerField(default=1)
+    token = models.IntegerField(default=0)
+    cost = models.FloatField(default=0)
+    total_cost = models.FloatField(default=0)
+    request_date = models.DateTimeField(default=datetime.datetime(1000, 1, 1))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-    

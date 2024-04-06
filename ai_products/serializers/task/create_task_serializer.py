@@ -9,6 +9,7 @@ class RequestCreateTaskSerializer(RequestErrorSerializer):
     description = serializers.CharField(allow_blank=True)
     project_id = serializers.IntegerField(min_value=1)
     ai_type_id = serializers.IntegerField(min_value=1)
+    is_save = serializers.BooleanField(default=False)
 
     def get_error(self) -> dict[str, Any]:
         self.set_message("バリデーションに失敗しました。")
@@ -18,4 +19,4 @@ class RequestCreateTaskSerializer(RequestErrorSerializer):
 class CreateTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ("id", "name", "description", "ai_type")
+        fields = ("id", "name", "description", "ai_type", "is_save")

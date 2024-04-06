@@ -8,7 +8,13 @@ from utils.errors import ErrorType, CustomApiErrorException, ErrorDetail
 class CreateTaskService:
 
     def create_task(
-        self, user: User, project_id: int, ai_type_id: int, name: str, description: str
+        self,
+        user: User,
+        project_id: int,
+        ai_type_id: int,
+        name: str,
+        description: str,
+        is_save: bool,
     ) -> Task:
 
         not_found_errors: List[ErrorDetail] = []
@@ -47,6 +53,7 @@ class CreateTaskService:
             description=description,
             project=project,
             ai_type=ai_type,
+            is_save=is_save,
             user=user,
         )
         task.save()

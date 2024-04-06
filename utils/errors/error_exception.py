@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import Any, List, Literal, Dict, Union
 from pydantic import BaseModel
 from ..errors import ErrorType
 from rest_framework import serializers
+from rest_framework.exceptions import APIException
+from rest_framework import status as http_status
 
 
 class ErrorDetail(BaseModel):
@@ -10,7 +12,7 @@ class ErrorDetail(BaseModel):
     message: str
 
 
-class _Error(BaseModel):
+class Error(BaseModel):
     status: int
     error: str
     error_type: str
@@ -33,7 +35,7 @@ class CustomApiErrorException(Exception):
             error_type (ErrorType): error_type指定(※error_typeが存在しない場合は、ErrorTypeに追加してください)
             message (str, optional): エラーメッセージ.
         """
-        self.error = _Error(
+        self.error = Error(
             status=error_type.get_http_status(),
             error=error_type.get_error(),
             error_type=error_type.get_error_type(),
@@ -41,6 +43,10 @@ class CustomApiErrorException(Exception):
             code=error_type.get_error_code(),
             error_details=error_details,
         )
+
+    def get_error_model(self) -> Error:
+        """errorのBaseModel取得"""
+        return self.error
 
     def get_error(self) -> dict[str, Any]:
         """errorの内容をレスポンスできる形で取得"""
@@ -54,6 +60,43 @@ class CustomApiErrorException(Exception):
         """error_detailを作成して、error_detailsに追加"""
         error_detail = ErrorDetail(field=field, message=message)
         self.error.error_details.append(error_detail)
+
+    def get_error_http_status(self) -> Union[
+        Literal[400],
+        Literal[401],
+        Literal[403],
+        Literal[404],
+        Literal[429],
+        Literal[500],
+        Literal[502],
+        Literal[503],
+        Literal[504],
+    ]:
+        http_status_dict: Dict[
+            int,
+            Union[
+                Literal[400],
+                Literal[401],
+                Literal[403],
+                Literal[404],
+                Literal[429],
+                Literal[500],
+                Literal[502],
+                Literal[503],
+                Literal[504],
+            ],
+        ] = {
+            400: http_status.HTTP_400_BAD_REQUEST,
+            401: http_status.HTTP_401_UNAUTHORIZED,
+            403: http_status.HTTP_403_FORBIDDEN,
+            404: http_status.HTTP_404_NOT_FOUND,
+            429: http_status.HTTP_429_TOO_MANY_REQUESTS,
+            500: http_status.HTTP_500_INTERNAL_SERVER_ERROR,
+            502: http_status.HTTP_502_BAD_GATEWAY,
+            503: http_status.HTTP_503_SERVICE_UNAVAILABLE,
+            504: http_status.HTTP_504_GATEWAY_TIMEOUT,
+        }
+        return http_status_dict.get(self.error.status)
 
 
 # Request時に使うSerializeクラス。(継承して使う)
@@ -98,3 +141,30 @@ class RequestErrorSerializer(serializers.Serializer):
         """error_detailを作成して、error_detailsに追加"""
         error_detail = ErrorDetail(field=field, message=message)
         self._error_exception.error.error_details.append(error_detail)
+
+    def get_error_http_status(self):
+        return self._error_exception.get_error_http_status()
+
+
+# DRF例外処理クラス(try-exceptを明示的に行わずに、自動的にResponseが作成される)
+class CustomApiException(APIException):
+
+    def __init__(
+        self,
+        error_type: ErrorType,
+        message: str = "",
+        error_details: List[ErrorDetail] = [],
+    ):
+        """
+        DRF例外処理クラス(try-exceptを明示的に行わずに、自動的にResponseが作成される)
+        """
+        error = _Error(
+            status=error_type.get_http_status(),
+            error=error_type.get_error(),
+            error_type=error_type.get_error_type(),
+            message=message,
+            code=error_type.get_error_code(),
+            error_details=error_details,
+        )
+        super().__init__(error.model_dump(), error.code)
+        self.status_code = error.status

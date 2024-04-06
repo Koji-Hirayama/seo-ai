@@ -5,14 +5,17 @@ from drf_spectacular.utils import extend_schema
 from ai_products.serializers import RequestCreateTaskSerializer, CreateTaskSerializer
 from ai_products.services import CreateTaskService
 from utils.errors import ErrorType, CustomApiErrorException
+from rest_framework.permissions import IsAuthenticated
+from ai_products.utils import IsRelatedToProjectUser
 
 
 class CreateTaskApiView(APIView):
+    permission_classes = [IsAuthenticated, IsRelatedToProjectUser]
 
     @extend_schema(
         request=RequestCreateTaskSerializer, responses={201: CreateTaskSerializer}
     )
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = RequestCreateTaskSerializer(
             data=request.data, error_type=ErrorType.CREATE_TASK_BAD_REQUEST
         )
@@ -23,6 +26,7 @@ class CreateTaskApiView(APIView):
         task_description = serializer.validated_data.get("description")
         project_id = serializer.validated_data.get("project_id")
         ai_type_id = serializer.validated_data.get("ai_type_id")
+        is_save = serializer.validated_data.get("is_save")
         try:
             service = CreateTaskService()
             task = service.create_task(
@@ -30,6 +34,7 @@ class CreateTaskApiView(APIView):
                 description=task_description,
                 project_id=project_id,
                 ai_type_id=ai_type_id,
+                is_save=is_save,
                 user=request.user,
             )
         except CustomApiErrorException as e:
