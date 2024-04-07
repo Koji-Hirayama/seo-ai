@@ -3,7 +3,7 @@ from ai_products.models import Prompt
 from typing import Dict
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError
-from ai_products.models import Work, Llm, User
+from ai_products.models import Work, User, AiModel
 from utils.errors import CustomApiErrorException, ErrorType, ErrorDetail
 
 
@@ -14,7 +14,7 @@ class CreatePromptService:
         output_example_model_description: str,
         output_example_model: Dict,
         work_id: int,
-        llm_id: int,
+        ai_model_id: int,
         user: User,
         order: int,
         token: int,
@@ -24,15 +24,15 @@ class CreatePromptService:
     ) -> Prompt:
         try:
             work = Work.objects.get(id=work_id)
-            llm = Llm.objects.get(id=llm_id)
-        except (Work.DoesNotExist, Llm.DoesNotExist) as e:
+            ai_model = AiModel.objects.get(id=ai_model_id)
+        except (Work.DoesNotExist, AiModel.DoesNotExist) as e:
             if isinstance(e, Work.DoesNotExist):
                 error_detail: ErrorDetail = ErrorDetail(
                     field="work", message=f"id:{work_id}のWorkは存在しません。"
                 )
-            elif isinstance(e, Llm.DoesNotExist):
+            elif isinstance(e, AiModel.DoesNotExist):
                 error_detail: ErrorDetail = ErrorDetail(
-                    field="llm", message=f"id:{llm_id}のLlmは存在しません。"
+                    field="ai_model", message=f"id:{ai_model}のAiModelは存在しません。"
                 )
             raise CustomApiErrorException(
                 error_type=ErrorType.CREATE_AI_PROMPT_TRANSACTION,
@@ -45,7 +45,7 @@ class CreatePromptService:
                 output_example_model_description=output_example_model_description,
                 output_example_model=output_example_model,
                 work=work,
-                llm=llm,
+                ai_model=ai_model,
                 user=user,
                 order=order,
                 token=token,

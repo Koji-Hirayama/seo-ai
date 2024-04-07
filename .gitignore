@@ -167,5 +167,6 @@ cython_debug/
 
 # ignore static files
 static/
-# ignore migration files
-migrations/
+# ignore migration files 
+# (migrations/__init__.pyだけpushしてある。docker-compose build時にmakemigrationsとmigrateが行えるように)
+# migrations/

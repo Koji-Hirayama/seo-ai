@@ -49,7 +49,7 @@ class ScrapingPromptAiAPIView(APIView):
         )
         try:
             result = ai_service.save_ai_answer(
-                work_id=1, llm_id=1, user=request.user, order=1
+                work_id=1, ai_model_id=1, user=request.user, order=1
             )
         except CustomApiErrorException as e:
             return Response(e.get_error(), status=e.get_error_http_status())
