@@ -79,7 +79,7 @@ class AiService:
             return ai
 
     def save_ai_answer(
-        self, work_id: int, llm_id: int, user: User, order: int
+        self, work_id: int, ai_model_id: int, user: User, order: int
     ) -> AiAnswerResults:
         answer: Ai = self.ai_answer()
         create_prompt_service = CreatePromptService()
@@ -95,7 +95,7 @@ class AiService:
                     cost=answer.ai_prompt.cost,
                     total_cost=answer.total_cost,
                     work_id=work_id,
-                    llm_id=llm_id,
+                    ai_model_id=ai_model_id,
                     user=user,
                     order=order,
                 )

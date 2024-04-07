@@ -47,7 +47,7 @@ class AiResponseAPIView(APIView):
             url, input, output_example_model_description, output_example_model
         )
         promptOutput = PromptOutput(
-            id=1, output="", output_json=result, prompt_id=1, llm_id=1
+            id=1, output="", output_json=result, prompt_id=1, ai_model_id=1
         )
 
         prompt_service = CreatePromptService()

@@ -1,9 +1,9 @@
 import datetime
 from django.db import models
-from .llm import Llm
 from .prompt import Prompt
 from .work import Work
 from .user import User
+from .ai_model import AiModel
 
 
 class PromptOutput(models.Model):
@@ -15,8 +15,8 @@ class PromptOutput(models.Model):
     work = models.ForeignKey(
         Work, on_delete=models.CASCADE, related_name="prompt_outputs"
     )
-    llm = models.ForeignKey(
-        Llm, on_delete=models.CASCADE, related_name="prompt_outputs"
+    ai_model = models.ForeignKey(
+        AiModel, on_delete=models.CASCADE, related_name="prompt_outputs"
     )
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="prompt_outputs"

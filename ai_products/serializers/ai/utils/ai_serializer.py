@@ -18,7 +18,7 @@ class BaseRequestPromptSerializer(RequestErrorSerializer):
     output_example_model_description = serializers.CharField()
     output_example_model = serializers.JSONField()
     work_id = serializers.IntegerField(min_value=1)
-    llm_id = serializers.IntegerField(min_value=1)
+    ai_model_id = serializers.IntegerField(min_value=1)
 
     def is_valid(self, *, raise_exception=False):
         is_valid = super().is_valid(raise_exception=raise_exception)
@@ -62,7 +62,7 @@ class AiResponseSerializer(serializers.ModelSerializer):
             "output",
             "output_model",
             "prompt",
-            "llm",
+            "ai_model",
             "user",
             "is_error",
             "token",

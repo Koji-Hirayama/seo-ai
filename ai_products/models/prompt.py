@@ -1,7 +1,7 @@
 from django.db import models
-from .llm import Llm
 from .work import Work
 from .user import User
+from .ai_model import AiModel
 import datetime
 
 
@@ -12,7 +12,9 @@ class Prompt(models.Model):
     )
     output_example_model = models.JSONField(blank=True, null=True)
     work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name="prompts")
-    llm = models.ForeignKey(Llm, on_delete=models.CASCADE, related_name="prompts")
+    ai_model = models.ForeignKey(
+        AiModel, on_delete=models.CASCADE, related_name="prompts"
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="prompts")
     order = models.IntegerField(default=1)
     token = models.IntegerField(default=0)

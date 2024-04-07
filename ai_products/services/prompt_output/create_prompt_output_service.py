@@ -22,7 +22,7 @@ class CreatePromptOutputService:
         is_error: bool,
     ) -> PromptOutput:
         try:
-            prompt = Prompt.objects.select_related("llm", "work").get(id=prompt_id)
+            prompt = Prompt.objects.select_related("ai_model", "work").get(id=prompt_id)
         except Prompt.DoesNotExist as e:
             error_detail: ErrorDetail = ErrorDetail(
                 field="prompt", message=f"id:{prompt_id}のPromptは存在しません。"
@@ -38,7 +38,7 @@ class CreatePromptOutputService:
                 output_model=output_model,
                 prompt=prompt,
                 work=prompt.work,
-                llm=prompt.llm,
+                ai_model=prompt.ai_model,
                 user=user,
                 order=order,
                 token=token,
