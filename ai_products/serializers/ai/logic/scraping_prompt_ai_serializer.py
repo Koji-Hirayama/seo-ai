@@ -5,4 +5,4 @@ from rest_framework import serializers
 
 
 class RequestScrapingPromptAiSerializer(BaseRequestPromptSerializer):
-    url = serializers.CharField()
+    urls = serializers.ListField(child=serializers.CharField())

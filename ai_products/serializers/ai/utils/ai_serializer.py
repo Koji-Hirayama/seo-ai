@@ -4,7 +4,7 @@ from ai_products.services.ai.interface.ai_logic_service_interface import (
     OutputExampleModel,
 )
 from utils.errors import RequestErrorSerializer
-from ai_products.models import PromptOutput
+from ai_products.models import PromptOutput, Prompt, Work
 from .dynamic_pydantic_model_serializer import AiOutputPydanticModelSerialiser
 from pydantic import BaseModel, ValidationError
 
@@ -17,7 +17,7 @@ class BaseRequestPromptSerializer(RequestErrorSerializer):
     input = serializers.CharField()
     output_example_model_description = serializers.CharField()
     output_example_model = serializers.JSONField()
-    work_id = serializers.IntegerField(min_value=1)
+    task_id = serializers.IntegerField(min_value=1)
     ai_model_id = serializers.IntegerField(min_value=1)
 
     def is_valid(self, *, raise_exception=False):
@@ -29,7 +29,7 @@ class BaseRequestPromptSerializer(RequestErrorSerializer):
                 )
                 aiOutputPydanticModelserialiser = AiOutputPydanticModelSerialiser()
                 self._output_model_class = aiOutputPydanticModelserialiser.create_model(
-                    self.validated_data["output_example_model"]
+                    self._output_example_model.model_dump()
                 )
             except ValidationError:
                 self.create_error_detail(
@@ -54,14 +54,29 @@ class BaseRequestPromptSerializer(RequestErrorSerializer):
         return self._output_model_class
 
 
-class AiResponseSerializer(serializers.ModelSerializer):
+class _PromptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prompt
+        fields = (
+            "id",
+            "prompt",
+            "output_example_model_description",
+            "output_example_model",
+            "request_date",
+            "token",
+            "cost",
+            "total_cost",
+            "order",
+        )
+
+
+class _PromptOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromptOutput
         fields = (
             "id",
             "output",
             "output_model",
-            "prompt",
             "ai_model",
             "user",
             "is_error",
@@ -69,4 +84,18 @@ class AiResponseSerializer(serializers.ModelSerializer):
             "cost",
             "total_cost",
             "response_date",
+            "order",
+            "prompt",
         )
+
+
+class _WorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Work
+        fields = ("id", "version")
+
+
+class AiResponseSerializer(serializers.Serializer):
+    prompt = _PromptSerializer()
+    prompt_output = _PromptOutputSerializer()
+    work = _WorkSerializer()

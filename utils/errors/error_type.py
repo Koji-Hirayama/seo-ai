@@ -70,8 +70,21 @@ class ErrorType(_BaseErrorTypeEnum):
     PROJECT_ID_AND_TASK_ID_BAD_REQUEST = ("E1004", _ErrorStatus.BAD_REQUEST)
     TASK_ID_BAD_REQUEST = ("E1005", _ErrorStatus.BAD_REQUEST)
     PROMPT_BAD_REQUEST = ("E1006", _ErrorStatus.BAD_REQUEST)
+    SCRAPING_URL_BAD_REQUEST = ("E1007", _ErrorStatus.BAD_REQUEST)
+    SCRAPING_PROMPT_MESSAGE_BAD_REQUEST = ("E1008", _ErrorStatus.BAD_REQUEST)
+    # 対象がAIに関する場合は、E1100番台にする。
+    # ===================================
     # AIの回答をJSONで受け取り、MODELに変更する際のバリデーションエラータイプ
-    AI_MODEL_VALIDATE_JSON_BAD_REQUEST = ("E1007", _ErrorStatus.BAD_REQUEST)
+    AI_MODEL_VALIDATE_JSON_BAD_REQUEST = ("E1101", _ErrorStatus.BAD_REQUEST)
+    # アプリケーションで推奨するプロンプトのトークン数が上限を超える
+    AI_MODEL_RECOMMENDED_PROMPT_TOKEN_LIMIT_BAD_REQUEST = (
+        "E1102",
+        _ErrorStatus.BAD_REQUEST,
+    )
+    # ===================================
+    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E1100番台にする
+    CREATE_PROMPT_BAD_REQUEST = ("E1101", _ErrorStatus.BAD_REQUEST)
+    CREATE_PROMPT_OUTPUT_BAD_REQUEST = ("E1102", _ErrorStatus.BAD_REQUEST)
 
     # =============================
     # 404 NOT_FOUND系はE2000番台。
@@ -80,11 +93,13 @@ class ErrorType(_BaseErrorTypeEnum):
     PROJECT_NOT_FOUND = ("E2101", _ErrorStatus.NOT_FOUND)
     AI_TYPE_NOT_FOUND = ("E2102", _ErrorStatus.NOT_FOUND)
     TASK_NOT_FOUND = ("E2103", _ErrorStatus.NOT_FOUND)
+    AI_MODEL_NOT_FOUND = ("E2104", _ErrorStatus.NOT_FOUND)
     # ===================================
     # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E2200番台にする
-    CREATE_TASK_NOT_FOUND = ("E2201", _ErrorStatus.NOT_FOUND)
-    # AIからレスポンスが返ってきた後に、プロンプトとその回答結果をDBに保存する時のエラータイプ
-    CREATE_AI_PROMPT_TRANSACTION = ("E2202", _ErrorStatus.NOT_FOUND)
+    CREATE_TASK_ELEMENT_NOT_FOUND = ("E2201", _ErrorStatus.NOT_FOUND)
+    CREATE_WORK_ELEMENT_NOT_FOUND = ("E2202", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_ELEMENT_NOT_FOUND = ("E2203", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_OUTPUT_ELEMENT_NOT_FOUND = ("E2204", _ErrorStatus.NOT_FOUND)
 
     # =============================
     # 403 FORBIDDEN系はE3000番台。
@@ -95,6 +110,11 @@ class ErrorType(_BaseErrorTypeEnum):
     # 500 INTERNAL_SERVER_ERROR系はE4000番台。
     # =============================
     REQUEST_OPENAI_INTERNAL_SERVER_ERROR = ("E4001", _ErrorStatus.INTERNAL_SERVER_ERROR)
+    CREATE_PROMPT_INTERNAL_SERVER_ERROR = ("E4002", _ErrorStatus.INTERNAL_SERVER_ERROR)
+    CREATE_PROMPT_OUTPUT_INTERNAL_SERVER_ERROR = (
+        "E4003",
+        _ErrorStatus.INTERNAL_SERVER_ERROR,
+    )
 
     # =============================
     # 外部APIへのリクエストエラー系は5000番台。

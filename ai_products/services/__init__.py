@@ -9,3 +9,7 @@ from .prompt.create_prompt_service import CreatePromptService
 from .prompt_output.create_prompt_output_service import CreatePromptOutputService
 from .ai.core.ai_service import AiService
 from .ai.interface.ai_logic_service_interface import AiLogicServiceInterface
+from .ai_model.get_ai_models_service import GetAiModelService
+from .ai.scraping.unstructured_url_loader_service import UnstructuredURLLoaderService
+from .ai.scraping.get_scraping_results_service import GetScrapingResultsService
+from .ai.messages.get_scraping_prompt_message_service import GetScrapingPromptMessage

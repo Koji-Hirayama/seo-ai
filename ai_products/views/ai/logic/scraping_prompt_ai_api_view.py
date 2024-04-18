@@ -25,33 +25,34 @@ class ScrapingPromptAiAPIView(APIView):
         serializer = RequestScrapingPromptAiSerializer(
             data=request.data,
             error_type=ErrorType.PROMPT_BAD_REQUEST,
-            context={"request": request},
+            # context={"request": request},
         )
         if not serializer.is_valid():
             return Response(
                 serializer.get_error(), status=serializer.get_error_http_status()
             )
 
-        url = serializer.validated_data.get("url")
+        ai_model_id = serializer.validated_data.get("ai_model_id")
+        task_id = serializer.validated_data.get("task_id")
+        urls = serializer.validated_data.get("urls")
         input = serializer.validated_data.get("input")
         description = serializer.validated_data.get("output_example_model_description")
         output_example_model = serializer.get_output_example_model()
         output_model_class = serializer.get_output_model_class()
 
         ai_service = AiService(
-            ScrapingPromptAiService(
-                urls=[url],
+            ai_model_id=ai_model_id,
+            ai_logic_service=ScrapingPromptAiService(
+                urls=urls,
                 input=input,
                 output_example_model=output_example_model,
                 output_example_model_description=description,
                 output_model_class=output_model_class,
-            )
+            ),
         )
         try:
-            result = ai_service.save_ai_answer(
-                work_id=1, ai_model_id=1, user=request.user, order=1
-            )
+            result = ai_service.save_ai_answer(task_id=task_id, user=request.user)
         except CustomApiErrorException as e:
             return Response(e.get_error(), status=e.get_error_http_status())
-        serializer = AiResponseSerializer(result.prompt_output)
+        serializer = AiResponseSerializer(result)
         return Response(serializer.data, status=status.HTTP_200_OK)

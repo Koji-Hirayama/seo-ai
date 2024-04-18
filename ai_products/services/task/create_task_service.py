@@ -42,7 +42,7 @@ class CreateTaskService:
         if not_found_errors:
             # ProjectまたはAiTypeが存在しない場合の例外処理
             raise CustomApiErrorException(
-                error_type=ErrorType.CREATE_TASK_NOT_FOUND,
+                error_type=ErrorType.CREATE_TASK_ELEMENT_NOT_FOUND,
                 message="ProjectまたはAiTypeが存在しません。タスクの作成ができません。",
                 error_details=not_found_errors,
             )
