@@ -35,10 +35,42 @@ class CreatePromptService:
                     field="ai_model", message=f"id:{ai_model}のAiModelは存在しません。"
                 )
             raise CustomApiErrorException(
-                error_type=ErrorType.CREATE_AI_PROMPT_TRANSACTION,
+                error_type=ErrorType.CREATE_PROMPT_ELEMENT_NOT_FOUND,
                 message="Promptの作成に必要な要素が存在しません。",
                 error_details=[error_detail],
             )
+        try:
+            create_prompt = self.create_prompt_direct(
+                prompt=prompt,
+                output_example_model_description=output_example_model_description,
+                output_example_model=output_example_model,
+                work=work,
+                ai_model=ai_model,
+                user=user,
+                order=order,
+                token=token,
+                cost=cost,
+                total_cost=total_cost,
+                request_date=request_date,
+            )
+        except CustomApiErrorException as e:
+            raise e
+        return create_prompt
+
+    def create_prompt_direct(
+        self,
+        prompt: str,
+        output_example_model_description: str,
+        output_example_model: Dict,
+        work: Work,
+        ai_model: AiModel,
+        user: User,
+        order: int,
+        token: int,
+        cost: float,
+        total_cost: float,
+        request_date: datetime.datetime,
+    ) -> Prompt:
         try:
             create_prompt = Prompt(
                 prompt=prompt,
@@ -63,7 +95,7 @@ class CreatePromptService:
                 field="prompt", message="バリデーションエラーが発生しました。"
             )
             raise CustomApiErrorException(
-                error_type=ErrorType.CREATE_AI_PROMPT_TRANSACTION,
+                error_type=ErrorType.CREATE_PROMPT_BAD_REQUEST,
                 message="Promptの作成に失敗しました。",
                 error_details=[error_detail],
             )
@@ -73,7 +105,7 @@ class CreatePromptService:
                 field="prompt", message="データベースエラーが発生しました。"
             )
             raise CustomApiErrorException(
-                error_type=ErrorType.CREATE_AI_PROMPT_TRANSACTION,
+                error_type=ErrorType.CREATE_PROMPT_INTERNAL_SERVER_ERROR,
                 message="Promptの作成に失敗しました。",
                 error_details=[error_detail],
             )

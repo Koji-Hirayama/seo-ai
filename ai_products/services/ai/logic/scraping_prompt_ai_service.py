@@ -4,17 +4,16 @@ from ai_products.integrations.llm.chat_open_ai import ChatOpenAi
 from ai_products.integrations.llm.simple_llm_answers.simple_llm_answer_with_function_calling import (
     SimpleLlmAnswerWithFunctionCalling,
 )
+from ai_products.models import AiModel
 from ai_products.services.ai.interface.ai_logic_service_interface import (
     AiAnswer,
     AiLogicServiceInterface,
     OutputExampleModel,
 )
+from ai_products.services import GetScrapingPromptMessage
 from ai_products.services.ai.serializers.ai_output_converter_service import (
     AiOutputConverterService,
 )
-from utils.errors import CustomApiErrorException
-from ..scraping.unstructured_url_loader_service import UnstructuredURLLoaderService
-from langchain.schema import HumanMessage
 from utils.errors import CustomApiErrorException
 
 
@@ -35,34 +34,22 @@ class ScrapingPromptAiService(AiLogicServiceInterface):
         self.input = kwargs.get("input")
         self.urls = kwargs.get("urls")
 
-    def ai_answer(self) -> AiAnswer:
-        scraping = UnstructuredURLLoaderService()
-        scraping_datas = scraping.url_loader(self.urls)
-        context = ""
-        for data in scraping_datas:
-            text = data.page_content
-            # \r \n を削除
-            text = text.replace("\r", "")
-            text = text.replace("\n", "")
-            # スペースを削除
-            text = text.replace(" ", "")
-            context += text + "\n\n" + "=======================" + "\n\n"
-        PROMPT_TEMPLETE = """次のコンテキストから{input}\n
-        {context}
-        """
+    def ai_answer(self, ai_model: AiModel) -> AiAnswer:
+        scraping_prompt_service = GetScrapingPromptMessage()
+        human_message = scraping_prompt_service.get_human_message(
+            input=self.input, urls=self.urls
+        )
+
         messages = [
-            HumanMessage(
-                content=PROMPT_TEMPLETE.format(context=context, input=self.input)
-            )
+            human_message,
         ]
         function = {
             "name": "answer_to_prompt",
             "description": self.output_example_model_description,
             "parameters": self.output_model_class.model_json_schema(),
         }
-
         try:
-            llm = ChatOpenAi(model_name="gpt-3.5-turbo-1106")
+            llm = ChatOpenAi(ai_model=ai_model)
             result = llm.function_call_predict_messages(
                 messages=messages, functions=[function]
             )

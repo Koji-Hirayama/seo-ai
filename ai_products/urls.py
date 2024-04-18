@@ -11,6 +11,9 @@ from .views import (
     CreateWorkAPIView,
     AiResponseAPIView,
     ScrapingPromptAiAPIView,
+    GetAiModelsAPIView,
+    ScrapingResultsAPIView,
+    ScrapingPromptMessagesAPIView,
 )
 from .views import LoginView, LogoutView, RefreshTokenView, TokenVerifyView
 
@@ -29,6 +32,12 @@ urlpatterns = [
     ),
     # AiType系
     path("v1/get_aitypes/", GetAiTypesAPIView.as_view(), name="get_aitypes"),
+    # AiModel系
+    path(
+        "v1/get_aimodels/",
+        GetAiModelsAPIView.as_view(),
+        name="get_aimodels",
+    ),
     # Task系
     path(
         "v1/<int:project_id>/get_tasks_for_project/",
@@ -68,6 +77,18 @@ urlpatterns = [
         "v1/<int:project_id>/ai/scraping_prompt_ai/",
         ScrapingPromptAiAPIView.as_view(),
         name="scraping_prompt_ai",
+    ),
+    # スクレイピング単体取得系
+    path(
+        "v1/scraping_results/",
+        ScrapingResultsAPIView.as_view(),
+        name="scraping_results",
+    ),
+    # プロンプトメッセージ取得系
+    path(
+        "v1/scraping_prompt_message/",
+        ScrapingPromptMessagesAPIView.as_view(),
+        name="scraping_prompt_message",
     ),
     # ==============================
     # 認証関係

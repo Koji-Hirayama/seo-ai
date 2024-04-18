@@ -9,11 +9,15 @@ class AiOutputPydanticModelSerialiser:
         for item in data["keys"]:
             key = item["key"]
             description = item.get("description", "")
-            examples = item.get("examples", [])
             type_string = item.get("type", "str")  # JSONから型情報を取得
             field_type = self._get_type_from_string(
                 type_string
             )  # 型名をPythonの型に変換
+            # リスト指定の場合は、keyがList指定の場合は、examplesをList様に変換
+            if type_string.startswith("List[") and type_string.endswith("]"):
+                examples: List[List[Any]] = [item.get("examples", [])]
+            else:
+                examples: List[Any] = item.get("examples", [])
 
             namespace[key] = Field(
                 default=None, description=description, examples=examples
@@ -35,13 +39,12 @@ class AiOutputPydanticModelSerialiser:
             "int": int,
             "float": float,
             "bool": bool,
-            "list": List,
         }
 
         if type_string.startswith("List[") and type_string.endswith("]"):
             # ジェネリック型の処理
             inner_type_str = type_string[5:-1]
-            inner_type = self.get_type_from_string(inner_type_str)
+            inner_type = self._get_type_from_string(inner_type_str)
             return List[inner_type]
         else:
             return type_mapping.get(type_string, str)

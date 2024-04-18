@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict
+from typing import List, Dict, Any
 from pydantic import BaseModel
-from datetime import datetime
 from dataclasses import dataclass
+from ai_products.models import AiModel
 
 
 class OutputExampleModelKey(BaseModel):
     key: str
     description: str
-    examples: List[str]
+    examples: List[Any]
     type: str
 
 
@@ -22,34 +22,6 @@ class AiAnswer:
     output: str
     output_model: Dict
     is_error: bool
-
-
-@dataclass
-class AiPrompt:
-    prompt: str
-    output_example_model_description: str
-    output_example_model: OutputExampleModel
-    token: int
-    cost: float
-    request_date: datetime
-
-
-@dataclass
-class AiOutput:
-    output: str
-    output_model: Dict
-    token: int
-    cost: float
-    response_date: datetime
-    is_error: bool
-
-
-@dataclass
-class Ai:
-    ai_prompt: AiPrompt
-    ai_output: AiOutput
-    total_token: int
-    total_cost: float
 
 
 class AiLogicServiceInterface(ABC):
@@ -66,5 +38,5 @@ class AiLogicServiceInterface(ABC):
         self.output_model_class = output_model_class
 
     @abstractmethod
-    def ai_answer(self) -> AiAnswer:
+    def ai_answer(self, ai_model: AiModel) -> AiAnswer:
         pass
