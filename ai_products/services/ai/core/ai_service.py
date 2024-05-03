@@ -13,6 +13,7 @@ from ai_products.services.ai_model.get_ai_models_service import GetAiModelServic
 from ai_products.services.ai_type_ai_input.get_ai_type_input_fields_service import (
     GetAiTypeInputFieldsService,
 )
+from ai_products.services.prompt.create_prompt_service import CreatePromptService
 from ai_products.services.prompt_input.create_prompt_input_service import (
     CreatePromptInputService,
 )
@@ -31,7 +32,6 @@ from django.utils import timezone
 from ai_products.services.prompt_output.create_prompt_output_service import (
     CreatePromptOutputService,
 )
-from ai_products.services import CreatePromptService
 from dataclasses import dataclass
 from django.db import transaction
 from utils.errors import CustomApiErrorException

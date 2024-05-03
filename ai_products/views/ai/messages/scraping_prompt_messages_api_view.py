@@ -1,14 +1,21 @@
 from rest_framework.views import APIView
-from ai_products.serializers import (
+from ai_products.serializers.ai.messages.scraping_prompt_message_serializer import (
     RequestScrapingPromptMessageSeriaizer,
     ScrapingPromptMessageSeriaizer,
 )
-from ai_products.services import GetAiInputFieldService, GetScrapingResultsService
+from ai_products.services.ai.messages.get_scraping_prompt_message_service import (
+    GetScrapingPromptMessageService,
+)
+from ai_products.services.ai.scraping.get_scraping_results_service import (
+    GetScrapingResultsService,
+)
+from ai_products.services.ai_input_field.get_ai_input_field_service import (
+    GetAiInputFieldService,
+)
 from utils.errors import ErrorType
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from ai_products.services import GetScrapingPromptMessageService
 
 
 class ScrapingPromptMessagesAPIView(APIView):

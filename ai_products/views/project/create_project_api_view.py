@@ -1,12 +1,12 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from ai_products.services import CreateProjectService
-from drf_spectacular.utils import extend_schema
-from ai_products.serializers import (
+from ai_products.serializers.project.create_project_serializer import (
     CreateProjectSerializer,
     RequestCreateProjectSerializer,
 )
+from drf_spectacular.utils import extend_schema
+from ai_products.services.project.create_project_service import CreateProjectService
 from utils.errors import ErrorType
 
 

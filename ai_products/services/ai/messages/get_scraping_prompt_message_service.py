@@ -1,6 +1,5 @@
 from typing import List
 from ai_products.models import AiInputField
-from ai_products.services import UnstructuredURLLoaderService
 from ai_products.services.ai.scraping.get_scraping_results_service import (
     ScrapingResult,
 )

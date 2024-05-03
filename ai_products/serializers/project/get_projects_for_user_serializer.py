@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ai_products.models import Project
 from ai_products.models import ProjectUser
-from ai_products.serializers import UserSerializer
+from ai_products.serializers.user.user_serializer import UserSerializer
 
 
 class _ProjectSerializer(serializers.ModelSerializer):

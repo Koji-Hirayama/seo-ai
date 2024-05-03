@@ -1,11 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from ai_products.serializers import (
-    AiResponseSerializer,
-)
 from ai_products.serializers.ai.logic.scraping_prompt_ai_serializer import (
     RequestScrapingPromptAiSerializer,
 )
+from ai_products.serializers.ai.utils.ai_serializer import AiResponseSerializer
 from ai_products.services.ai.core.ai_service import AiService
 from ai_products.services.ai.ai_input_type_logic.scraping_prompt_ai_service import (
     ScrapingPromptAiService,

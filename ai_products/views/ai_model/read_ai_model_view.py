@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
+from ai_products.serializers.ai_model.ai_model_serializer import AiModelSerialiser
 from ai_products.services.ai_model.get_ai_models_service import GetAiModelService
-from ai_products.serializers import AiModelSerialiser
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema

@@ -2,9 +2,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status
-from ai_products.serializers import GetTasksForProjectSerializer
-from ai_products.serializers import RequestProjectIdSerializer
-from ai_products.services import GetTasksForProjectService
+from ai_products.serializers.project.project_id_serializer import (
+    RequestProjectIdSerializer,
+)
+from ai_products.serializers.task.get_tasks_for_project_serializer import (
+    GetTasksForProjectSerializer,
+)
+from ai_products.services.task.get_tasks_for_project_service import (
+    GetTasksForProjectService,
+)
 from utils.errors import ErrorType, CustomApiErrorException
 from rest_framework.permissions import IsAuthenticated
 from ai_products.utils import IsRelatedToProjectUser

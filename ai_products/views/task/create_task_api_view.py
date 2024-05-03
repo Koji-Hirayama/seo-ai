@@ -2,8 +2,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from ai_products.serializers import RequestCreateTaskSerializer, CreateTaskSerializer
-from ai_products.services import CreateTaskService
+from ai_products.serializers.task.create_task_serializer import (
+    CreateTaskSerializer,
+    RequestCreateTaskSerializer,
+)
+from ai_products.services.task.create_task_service import CreateTaskService
 from utils.errors import ErrorType, CustomApiErrorException
 from rest_framework.permissions import IsAuthenticated
 from ai_products.utils import IsRelatedToProjectUser

@@ -1,6 +1,8 @@
 from typing import List
 from pydantic import BaseModel
-from ai_products.services import UnstructuredURLLoaderService
+from ai_products.services.ai.scraping.unstructured_url_loader_service import (
+    UnstructuredURLLoaderService,
+)
 
 
 class ScrapingResult(BaseModel):

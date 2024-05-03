@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
-from ai_products.serializers import (
+from ai_products.serializers.ai_type_ai_input.get_ai_type_input_fields_serializer import (
     GetAiTypeInputFieldsSerializer,
     RequestAiTypeInputFieldsSerializer,
 )
-from ai_products.services import GetAiTypeInputFieldsService
+from ai_products.services.ai_type_ai_input.get_ai_type_input_fields_service import (
+    GetAiTypeInputFieldsService,
+)
 from utils.errors import ErrorType, CustomApiErrorException
 from rest_framework.response import Response
 from rest_framework import status

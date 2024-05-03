@@ -1,6 +1,11 @@
 from rest_framework.views import APIView
-from ai_products.serializers import RequestScrapingSerializer, ScrapingSerialize
-from ai_products.services import GetScrapingResultsService
+from ai_products.serializers.ai.scraping.scraping_serializer import (
+    RequestScrapingSerializer,
+    ScrapingSerialize,
+)
+from ai_products.services.ai.scraping.get_scraping_results_service import (
+    GetScrapingResultsService,
+)
 from utils.errors import ErrorType
 from rest_framework.response import Response
 from rest_framework import status

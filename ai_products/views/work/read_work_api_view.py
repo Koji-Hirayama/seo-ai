@@ -1,11 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from ai_products.serializers import (
-    RequestProjectIdAndTaskIdSerializer,
+from ai_products.serializers.work.get_works_for_task_serializer import (
     GetWorksForTaskSerializer,
+    RequestProjectIdAndTaskIdSerializer,
 )
-from ai_products.services import GetWorksForTaskService
+from ai_products.services.work.get_works_for_task_service import GetWorksForTaskService
 from utils.errors import ErrorType
 from utils.errors import CustomApiErrorException
 from drf_spectacular.utils import extend_schema, OpenApiParameter

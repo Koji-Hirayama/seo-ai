@@ -1,16 +1,15 @@
 from typing import List
 from pydantic import BaseModel
 from ai_products.integrations.llm.chat_open_ai import ChatOpenAi
-from ai_products.integrations.llm.simple_llm_answers.simple_llm_answer_with_function_calling import (
-    SimpleLlmAnswerWithFunctionCalling,
-)
 from ai_products.models import AiModel
 from ai_products.services.ai.interface.ai_service_interface import (
     AiAnswer,
     AiServiceInterface,
     OutputExampleModel,
 )
-from ai_products.services import GetScrapingPromptMessageService
+from ai_products.services.ai.messages.get_scraping_prompt_message_service import (
+    GetScrapingPromptMessageService,
+)
 from ai_products.services.ai.serializers.ai_output_converter_service import (
     AiOutputConverterService,
 )
@@ -35,7 +34,7 @@ class ScrapingPromptAiService(AiServiceInterface):
         self.urls = kwargs.get("urls")
 
     def ai_answer(self, ai_model: AiModel) -> AiAnswer:
-        scraping_prompt_service = GetScrapingPromptMessage()
+        scraping_prompt_service = GetScrapingPromptMessageService()
         human_message = scraping_prompt_service.get_human_message(
             input=self.input, urls=self.urls
         )

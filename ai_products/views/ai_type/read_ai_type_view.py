@@ -1,9 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from ai_products.serializers import AiTypeSerializer
-from ai_products.services import GetAiTypesService
 from drf_spectacular.utils import extend_schema
+
+from ai_products.serializers.ai_type.ai_types_serializer import AiTypeSerializer
+from ai_products.services.ai_type.get_ai_types_service import GetAiTypesService
 
 
 class GetAiTypesAPIView(APIView):

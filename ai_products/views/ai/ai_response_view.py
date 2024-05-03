@@ -2,14 +2,16 @@ from typing import List, Dict
 from openai import BaseModel
 from rest_framework.views import APIView
 from ai_products.models import PromptOutput
-from ai_products.serializers import (
-    BaseRequestPromptSerializer,
+from ai_products.serializers.ai.utils.ai_serializer import (
     AiResponseSerializer,
+    BaseRequestPromptSerializer,
+)
+from ai_products.serializers.ai.utils.dynamic_pydantic_model_serializer import (
     AiOutputPydanticModelSerialiser,
 )
-from ai_products.services import (
-    AiService,
-    CreatePromptService,
+from ai_products.services.ai.core.ai_service import AiService
+from ai_products.services.prompt.create_prompt_service import CreatePromptService
+from ai_products.services.prompt_output.create_prompt_output_service import (
     CreatePromptOutputService,
 )
 from utils.errors import ErrorType

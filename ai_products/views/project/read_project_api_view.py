@@ -1,9 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from ai_products.services import GetProjectsForUserService
-from ai_products.serializers import GetProjectsForUserSerializer
+from ai_products.serializers.project.get_projects_for_user_serializer import (
+    GetProjectsForUserSerializer,
+)
 from drf_spectacular.utils import extend_schema
+
+from ai_products.services.project.get_projects_for_user_service import (
+    GetProjectsForUserService,
+)
 
 
 class GetProjectsForUserAPIView(APIView):

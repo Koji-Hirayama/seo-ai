@@ -2,9 +2,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from ai_products.serializers.work.create_work_serializer import (
+    CreateWorkSerializer,
+    RequestCreateWorkSerializer,
+)
+from ai_products.services.work.create_work_service import CreateWorkService
 from ai_products.utils import IsRelatedToProjectUser
-from ai_products.services import CreateWorkService
-from ai_products.serializers import CreateWorkSerializer, RequestCreateWorkSerializer
 from drf_spectacular.utils import extend_schema
 from utils.errors import ErrorType, CustomApiErrorException
 
