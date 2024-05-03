@@ -14,6 +14,8 @@ from .views import (
     GetAiModelsAPIView,
     ScrapingResultsAPIView,
     ScrapingPromptMessagesAPIView,
+    GetAiTypeInputFieldsAPIView,
+    TaskAiAPIView,
 )
 from .views import LoginView, LogoutView, RefreshTokenView, TokenVerifyView
 
@@ -50,6 +52,12 @@ urlpatterns = [
         GetWorksForTaskAPIView.as_view(),
         name="get_works_for_task",
     ),
+    # Ai画面のパーツ系
+    path(
+        "v1/<int:project_id>/ai/get_ai_type_input_fields/",
+        GetAiTypeInputFieldsAPIView.as_view(),
+        name="get_ai_type_input_fields",
+    ),
     # ==============================
     # POST
     # ==============================
@@ -78,6 +86,7 @@ urlpatterns = [
         ScrapingPromptAiAPIView.as_view(),
         name="scraping_prompt_ai",
     ),
+    path("v1/<int:project_id>/ai/task_ai/", TaskAiAPIView.as_view(), name="task_ai"),
     # スクレイピング単体取得系
     path(
         "v1/scraping_results/",

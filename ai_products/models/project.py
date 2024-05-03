@@ -7,10 +7,10 @@ class Project(models.Model):
     users = models.ManyToManyField(User, through="ProjectUser", related_name="projects")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(blank=True, null=True, )
-    
+    deleted_at = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
     def __str__(self) -> str:
         return self.name
-    
-    
-        

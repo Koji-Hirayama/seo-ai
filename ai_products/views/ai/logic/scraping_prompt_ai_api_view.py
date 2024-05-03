@@ -7,7 +7,7 @@ from ai_products.serializers.ai.logic.scraping_prompt_ai_serializer import (
     RequestScrapingPromptAiSerializer,
 )
 from ai_products.services.ai.core.ai_service import AiService
-from ai_products.services.ai.logic.scraping_prompt_ai_service import (
+from ai_products.services.ai.ai_input_type_logic.scraping_prompt_ai_service import (
     ScrapingPromptAiService,
 )
 
@@ -35,7 +35,7 @@ class ScrapingPromptAiAPIView(APIView):
         ai_model_id = serializer.validated_data.get("ai_model_id")
         task_id = serializer.validated_data.get("task_id")
         urls = serializer.validated_data.get("urls")
-        input = serializer.validated_data.get("input")
+        prompt_input = serializer.validated_data.get("prompt_input")
         description = serializer.validated_data.get("output_example_model_description")
         output_example_model = serializer.get_output_example_model()
         output_model_class = serializer.get_output_model_class()
@@ -44,7 +44,7 @@ class ScrapingPromptAiAPIView(APIView):
             ai_model_id=ai_model_id,
             ai_logic_service=ScrapingPromptAiService(
                 urls=urls,
-                input=input,
+                input=prompt_input,
                 output_example_model=output_example_model,
                 output_example_model_description=description,
                 output_model_class=output_model_class,

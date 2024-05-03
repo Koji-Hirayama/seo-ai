@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Dict, Any
 from langchain_openai import ChatOpenAI
 from ai_products.models import AiModel
 from utils.errors import OpenAIErrorHandler
-from langchain.schema import HumanMessage
+from langchain.schema import HumanMessage, AIMessage, SystemMessage
 import json
 from utils.errors import CustomApiErrorException, ErrorType, ErrorDetail
 
@@ -17,7 +17,10 @@ class ChatOpenAi:
         )
 
     def function_call_predict_messages(
-        self, messages: List[any], functions: List[any], min_output_token=1000
+        self,
+        messages: List[SystemMessage | HumanMessage | AIMessage],
+        functions: List[Dict[str, Any]],
+        min_output_token=1000,
     ):
         """_summary_
 

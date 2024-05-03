@@ -6,11 +6,11 @@ from ai_products.serializers import (
     GetWorksForTaskSerializer,
 )
 from ai_products.services import GetWorksForTaskService
-from ai_products.utils import IsRelatedToProjectUser
 from utils.errors import ErrorType
 from utils.errors import CustomApiErrorException
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.permissions import IsAuthenticated
+from ai_products.utils import IsRelatedToProjectUser
 
 
 class GetWorksForTaskAPIView(APIView):

@@ -72,6 +72,7 @@ class ErrorType(_BaseErrorTypeEnum):
     PROMPT_BAD_REQUEST = ("E1006", _ErrorStatus.BAD_REQUEST)
     SCRAPING_URL_BAD_REQUEST = ("E1007", _ErrorStatus.BAD_REQUEST)
     SCRAPING_PROMPT_MESSAGE_BAD_REQUEST = ("E1008", _ErrorStatus.BAD_REQUEST)
+    AI_TYPE_BAD_REQUEST = ("E1009", _ErrorStatus.BAD_REQUEST)
     # 対象がAIに関する場合は、E1100番台にする。
     # ===================================
     # AIの回答をJSONで受け取り、MODELに変更する際のバリデーションエラータイプ
@@ -89,17 +90,21 @@ class ErrorType(_BaseErrorTypeEnum):
     # =============================
     # 404 NOT_FOUND系はE2000番台。
     # =============================
-    # 対象が特定のModelを具体的に示してる場合は、E2100番台にする
-    PROJECT_NOT_FOUND = ("E2101", _ErrorStatus.NOT_FOUND)
-    AI_TYPE_NOT_FOUND = ("E2102", _ErrorStatus.NOT_FOUND)
-    TASK_NOT_FOUND = ("E2103", _ErrorStatus.NOT_FOUND)
-    AI_MODEL_NOT_FOUND = ("E2104", _ErrorStatus.NOT_FOUND)
+    # 対象が特定のModelを具体的に示してる場合は、E2000番台にする
+    PROJECT_NOT_FOUND = ("E2001", _ErrorStatus.NOT_FOUND)
+    AI_TYPE_NOT_FOUND = ("E2002", _ErrorStatus.NOT_FOUND)
+    TASK_NOT_FOUND = ("E2003", _ErrorStatus.NOT_FOUND)
+    AI_MODEL_NOT_FOUND = ("E2004", _ErrorStatus.NOT_FOUND)
+    AI_TYPE_AI_INPUT_NOT_FOUND = ("E2005", _ErrorStatus.NOT_FOUND)
+    AI_INPUT_FIELD_NOT_FOUND = ("E2006", _ErrorStatus.NOT_FOUND)
     # ===================================
-    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E2200番台にする
-    CREATE_TASK_ELEMENT_NOT_FOUND = ("E2201", _ErrorStatus.NOT_FOUND)
-    CREATE_WORK_ELEMENT_NOT_FOUND = ("E2202", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_ELEMENT_NOT_FOUND = ("E2203", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_OUTPUT_ELEMENT_NOT_FOUND = ("E2204", _ErrorStatus.NOT_FOUND)
+    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E2100番台にする
+    CREATE_TASK_ELEMENT_NOT_FOUND = ("E2101", _ErrorStatus.NOT_FOUND)
+    CREATE_WORK_ELEMENT_NOT_FOUND = ("E2102", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_ELEMENT_NOT_FOUND = ("E2103", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_OUTPUT_ELEMENT_NOT_FOUND = ("E2104", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_INPUTS_NOT_FOUND = ("E2105", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_INPUT_RESULTS_NOT_FOUND = ("E2106", _ErrorStatus.NOT_FOUND)
 
     # =============================
     # 403 FORBIDDEN系はE3000番台。
@@ -115,6 +120,7 @@ class ErrorType(_BaseErrorTypeEnum):
         "E4003",
         _ErrorStatus.INTERNAL_SERVER_ERROR,
     )
+    DATABASE_INTERNAL_SERVER_ERROR = ("E4004", _ErrorStatus.INTERNAL_SERVER_ERROR)
 
     # =============================
     # 外部APIへのリクエストエラー系は5000番台。

@@ -3,11 +3,12 @@ from ai_products.serializers import (
     RequestScrapingPromptMessageSeriaizer,
     ScrapingPromptMessageSeriaizer,
 )
+from ai_products.services import GetAiInputFieldService, GetScrapingResultsService
 from utils.errors import ErrorType
 from rest_framework.response import Response
 from rest_framework import status
 from drf_spectacular.utils import extend_schema
-from ai_products.services import GetScrapingPromptMessage
+from ai_products.services import GetScrapingPromptMessageService
 
 
 class ScrapingPromptMessagesAPIView(APIView):
@@ -25,7 +26,18 @@ class ScrapingPromptMessagesAPIView(APIView):
             )
         input = serializer.validated_data.get("input")
         urls = serializer.validated_data.get("urls")
-        service = GetScrapingPromptMessage()
-        message = service.get_human_message(input, urls)
-        serializer = ScrapingPromptMessageSeriaizer({"prompt": message.content})
+        ai_input_field_id = serializer.validated_data.get("ai_input_field_id")
+        get_ai_input_field_service = GetAiInputFieldService()
+        ai_input_field = get_ai_input_field_service.get_ai_input_field(
+            id=ai_input_field_id
+        )
+        message_service = GetScrapingPromptMessageService(
+            context_input_field=ai_input_field, input=input
+        )
+        scraping_service = GetScrapingResultsService()
+        scraping_results = scraping_service.get_results(urls=urls)
+        message = message_service.get_scraping_result_injection_message(
+            scraping_results=scraping_results
+        )
+        serializer = ScrapingPromptMessageSeriaizer({"prompt": message})
         return Response(serializer.data, status=status.HTTP_200_OK)

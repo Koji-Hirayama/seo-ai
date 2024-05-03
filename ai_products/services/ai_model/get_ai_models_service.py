@@ -13,7 +13,7 @@ class GetAiModelService:
         except AiModel.DoesNotExist as e:
             raise CustomApiErrorException(
                 error_type=ErrorType.AI_MODEL_NOT_FOUND,
-                message=f"id:{ai_model}のAiModelは存在しません。",
+                message=f"id:{id}のAiModelは存在しません。",
             )
         return ai_model
 

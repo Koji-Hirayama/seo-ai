@@ -8,6 +8,7 @@ from utils.errors import CustomApiErrorException, ErrorType, ErrorDetail
 
 
 class CreatePromptService:
+    # 外部キーのデータを取得して保存
     def create_prompt(
         self,
         prompt: str,
@@ -57,6 +58,7 @@ class CreatePromptService:
             raise e
         return create_prompt
 
+    # 外部キーのデータを外から注入して保存
     def create_prompt_direct(
         self,
         prompt: str,

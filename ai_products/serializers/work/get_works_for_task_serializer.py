@@ -1,6 +1,6 @@
 from typing import Any
 from rest_framework import serializers
-from ai_products.models import Task, Project, Work, AiType
+from ai_products.models import Work
 from utils.errors import RequestErrorSerializer
 
 

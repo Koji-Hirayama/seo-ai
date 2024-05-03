@@ -34,3 +34,10 @@ from .ai.messages.scraping_prompt_message_serializer import (
     RequestScrapingPromptMessageSeriaizer,
     ScrapingPromptMessageSeriaizer,
 )
+
+from .ai_type_ai_input.get_ai_type_input_fields_serializer import (
+    GetAiTypeInputFieldsSerializer,
+    RequestAiTypeInputFieldsSerializer,
+)
+
+from .ai.logic.task_ai_serializer import RequestTaskAiSerializer

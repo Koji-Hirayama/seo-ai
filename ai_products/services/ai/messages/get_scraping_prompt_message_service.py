@@ -1,28 +1,38 @@
 from typing import List
-from langchain.schema import HumanMessage
+from ai_products.models import AiInputField
 from ai_products.services import UnstructuredURLLoaderService
+from ai_products.services.ai.scraping.get_scraping_results_service import (
+    ScrapingResult,
+)
 
 
-class GetScrapingPromptMessage:
+class GetScrapingPromptMessageService:
+    def __init__(self, context_input_field: AiInputField, input: str):
+        self._context_input_field = context_input_field
+        self._input = input
 
-    def get_human_message(self, input: str, urls: List[str]) -> HumanMessage:
-        scraping = UnstructuredURLLoaderService()
-        scraping_datas = scraping.url_loader(urls)
-        context = "["
-        for data in scraping_datas:
-            text = data.page_content
-            # \r \n を削除
-            text = text.replace("\r", "")
-            text = text.replace("\n", "")
-            # スペースを削除
-            text = text.replace(" ", "")
-            # コンテキストに連結
-            if context != "[":
-                context += ",\n\n"
-            context += '"' + text + '"'
-        context += "]"
-        PROMPT_TEMPLETE = """次のコンテキストを元に、指示文への回答をしてください。\n
-        ・指示文:\n{text}\n
-        ・コンテキスト:\n{context}
+    def join_scraping_results_as_text(
+        self, scraping_results: List[ScrapingResult]
+    ) -> str:
         """
-        return HumanMessage(content=PROMPT_TEMPLETE.format(context=context, text=input))
+        ScrapingResultのリストからテキストを抽出し、一定のフォーマットで連結する。
+        """
+        result_context = "["
+        for scraping_result in scraping_results:
+            text = scraping_result.result
+            if result_context != "[":
+                result_context += ",\n\n"
+            result_context += '"' + text + '"'
+        result_context += "]"
+        return result_context
+
+    def get_scraping_result_injection_message(
+        self, scraping_results: List[ScrapingResult]
+    ) -> str:
+        # コンテキストに連結
+        scraping_result_context = self.join_scraping_results_as_text(scraping_results)
+        context = self._context_input_field.context
+        replaced_context = context.replace("{{input}}", self._input).replace(
+            "{{result_injection}}", scraping_result_context
+        )
+        return replaced_context

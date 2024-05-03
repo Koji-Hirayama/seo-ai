@@ -5,19 +5,19 @@ from ai_products.integrations.llm.simple_llm_answers.simple_llm_answer_with_func
     SimpleLlmAnswerWithFunctionCalling,
 )
 from ai_products.models import AiModel
-from ai_products.services.ai.interface.ai_logic_service_interface import (
+from ai_products.services.ai.interface.ai_service_interface import (
     AiAnswer,
-    AiLogicServiceInterface,
+    AiServiceInterface,
     OutputExampleModel,
 )
-from ai_products.services import GetScrapingPromptMessage
+from ai_products.services import GetScrapingPromptMessageService
 from ai_products.services.ai.serializers.ai_output_converter_service import (
     AiOutputConverterService,
 )
 from utils.errors import CustomApiErrorException
 
 
-class ScrapingPromptAiService(AiLogicServiceInterface):
+class ScrapingPromptAiService(AiServiceInterface):
     def __init__(
         self,
         output_example_model_description: str,

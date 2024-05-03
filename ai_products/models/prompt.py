@@ -6,10 +6,8 @@ import datetime
 
 
 class Prompt(models.Model):
-    prompt = models.TextField(blank=True, null=True)
-    output_example_model_description = models.CharField(
-        max_length=255, blank=True, null=True
-    )
+    prompt = models.TextField(blank=True)
+    output_example_model_description = models.CharField(max_length=255, blank=True)
     output_example_model = models.JSONField(blank=True, null=True)
     work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name="prompts")
     ai_model = models.ForeignKey(

@@ -7,7 +7,7 @@ from .ai_model import AiModel
 
 
 class PromptOutput(models.Model):
-    output = models.TextField(blank=True, null=True)
+    output = models.TextField(blank=True)
     output_model = models.JSONField(blank=True, null=True)
     prompt = models.ForeignKey(
         Prompt, on_delete=models.CASCADE, related_name="prompt_outputs"

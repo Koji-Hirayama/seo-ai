@@ -11,3 +11,7 @@ from .ai.logic.scraping_prompt_ai_api_view import ScrapingPromptAiAPIView
 from .ai_model.read_ai_model_view import GetAiModelsAPIView
 from .ai.scraping.scraping_results_api_view import ScrapingResultsAPIView
 from .ai.messages.scraping_prompt_messages_api_view import ScrapingPromptMessagesAPIView
+from .ai_type_ai_input.get_ai_type_input_fields_api_view import (
+    GetAiTypeInputFieldsAPIView,
+)
+from .ai.logic.task_ai_api_view import TaskAiAPIView

@@ -14,3 +14,10 @@ from .schedule import Schedule
 from .task import Task
 from .work import Work
 from .user import User
+from .ai_input import AiInput
+from .ai_type_ai_input import AiTypeAiInput
+from .ai_input_field import AiInputField
+from .ai_input_type import AiInputType
+from .ai_input_field_type import AiInputFieldType
+from .ai_input_type_ai_input_field_type import AiInputTypeAiInputFieldType
+from .prompt_input import PromptInput
