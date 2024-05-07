@@ -5,4 +5,4 @@ from rest_framework import serializers
 
 
 class RequestTaskAiSerializer(BaseRequestPromptSerializer):
-    urls = serializers.ListField(child=serializers.CharField())
+    pass

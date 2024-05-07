@@ -1,25 +1,9 @@
-from typing import Any, List
+from typing import Any
 from rest_framework import serializers
-from ai_products.services.ai.interface.ai_service_interface import (
-    OutputExampleModel,
-)
+from ai_products.domains.ai.ai_request_data.ai_request_datas import AiRequestDatas
+from ai_products.domains.ai.ai_request_params import AiRequestParams
 from utils.errors import RequestErrorSerializer
-from ai_products.models import PromptOutput, Prompt, Work, PromptInput
-from .dynamic_pydantic_model_serializer import AiOutputPydanticModelSerialiser
-from pydantic import BaseModel, ValidationError
-from dataclasses import dataclass
-
-
-@dataclass
-class AiRequestPrams:
-    task_id: int
-    ai_model_id: int
-    ai_type_id: int
-    output_example_model_description: str
-    output_example_model: OutputExampleModel
-    output_model_class: BaseModel
-    prompt_user_input: str
-    urls: List[str]
+from ai_products.models import PromptOutput, Prompt, Work, PromptInput, AiRequest, Task
 
 
 class BaseRequestPromptSerializer(RequestErrorSerializer):
@@ -28,65 +12,51 @@ class BaseRequestPromptSerializer(RequestErrorSerializer):
     """
 
     task_id = serializers.IntegerField(min_value=1)
-    ai_model_id = serializers.IntegerField(min_value=1)
+    work_id = serializers.IntegerField(min_value=1)
     ai_type_id = serializers.IntegerField(min_value=1)
-    output_example_model_description = serializers.CharField(
-        allow_blank=True, allow_null=True
-    )
-    output_example_model = serializers.JSONField(allow_null=True)
-    prompt_user_input = serializers.CharField(allow_blank=True, allow_null=True)
-    urls = serializers.ListField(
-        child=serializers.CharField(allow_blank=True),
-        allow_empty=True,
-    )
+    request_data = serializers.JSONField()
 
-    def get_ai_request_params(self) -> AiRequestPrams:
+    def get_ai_request_params(self) -> AiRequestParams:
         """is_valid()済み必須"""
-        return AiRequestPrams(
+
+        return AiRequestParams(
             task_id=self.validated_data["task_id"],
-            ai_model_id=self.validated_data["ai_model_id"],
+            work_id=self.validated_data["work_id"],
             ai_type_id=self.validated_data["ai_type_id"],
-            output_example_model_description=self.validated_data[
-                "output_example_model_description"
-            ],
-            output_example_model=self.get_output_example_model(),
-            output_model_class=self.get_output_model_class(),
-            prompt_user_input=self.validated_data["prompt_user_input"],
-            urls=self.validated_data["urls"],
+            request_data=AiRequestDatas(**self.validated_data["request_data"]),
         )
-
-    def is_valid(self, *, raise_exception=False):
-        is_valid = super().is_valid(raise_exception=raise_exception)
-        if is_valid:
-            try:
-                self._output_example_model = OutputExampleModel(
-                    **self.validated_data["output_example_model"]
-                )
-                aiOutputPydanticModelserialiser = AiOutputPydanticModelSerialiser()
-                self._output_model_class = aiOutputPydanticModelserialiser.create_model(
-                    self._output_example_model.model_dump()
-                )
-            except ValidationError:
-                self.create_error_detail(
-                    "output_example_model", "正しくて定義されていません。"
-                )
-                is_valid = False
-
-        return is_valid
 
     def get_error(self) -> dict[str, Any]:
         self.set_message("バリデーションに失敗しました。")
         return super().get_error()
 
-    # pydandictで返す
-    def get_output_example_model(self) -> OutputExampleModel:
-        """is_valid()済み必須"""
-        return self._output_example_model
 
-    # output_example_modelを元に、AIアウトプットのModelクラス作成して返す
-    def get_output_model_class(self) -> BaseModel:
-        """is_valid()済み必須"""
-        return self._output_model_class
+class _TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ("id", "name", "description")
+
+
+class _WorkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Work
+        fields = ("id", "version")
+
+
+class _AiRequestSerializer(serializers.ModelSerializer):
+    task = _TaskSerializer(read_only=True)
+    work = _WorkSerializer(read_only=True)
+
+    class Meta:
+        model = AiRequest
+        fields = (
+            "id",
+            "task",
+            "work",
+            "user",
+            "request_data",
+            "status",
+        )
 
 
 class _PromptSerializer(serializers.ModelSerializer):
@@ -124,12 +94,6 @@ class _PromptOutputSerializer(serializers.ModelSerializer):
         )
 
 
-class _WorkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Work
-        fields = ("id", "version")
-
-
 class _PromptInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = PromptInput
@@ -148,7 +112,7 @@ class _PromptInputSerializer(serializers.ModelSerializer):
 
 
 class AiResponseSerializer(serializers.Serializer):
+    ai_request = _AiRequestSerializer()
     prompt = _PromptSerializer()
     prompt_output = _PromptOutputSerializer()
     prompt_inputs = _PromptInputSerializer(many=True)
-    work = _WorkSerializer()

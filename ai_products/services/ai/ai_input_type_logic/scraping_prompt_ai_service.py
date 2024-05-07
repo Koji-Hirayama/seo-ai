@@ -1,11 +1,10 @@
-from typing import List
 from pydantic import BaseModel
+from ai_products.domains.ai.output_example_model import OutputExampleModel
 from ai_products.integrations.llm.chat_open_ai import ChatOpenAi
 from ai_products.models import AiModel
 from ai_products.services.ai.interface.ai_service_interface import (
     AiAnswer,
     AiServiceInterface,
-    OutputExampleModel,
 )
 from ai_products.services.ai.messages.get_scraping_prompt_message_service import (
     GetScrapingPromptMessageService,

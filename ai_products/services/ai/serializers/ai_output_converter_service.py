@@ -6,7 +6,7 @@ from typing import Dict, List
 
 class AiOutputConverterService:
     def function_call_arguments_to_dict(
-        self, additional_kwargs: any, output_model_class: BaseModel
+        self, additional_kwargs: any, output_base_model: BaseModel
     ) -> Dict:
         """_summary_:
             FunctionCalling結果の引数をDictに変換して取得。
@@ -20,7 +20,7 @@ class AiOutputConverterService:
         """
         try:
             arguments = additional_kwargs["function_call"]["arguments"]
-            output_model = output_model_class.model_validate_json(arguments)
+            output_model = output_base_model.model_validate_json(arguments)
         except ValidationError as e:
             # バリデーションエラー時の処理
             error_details: List[ErrorDetail] = []

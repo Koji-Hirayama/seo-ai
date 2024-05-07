@@ -1,3 +1,6 @@
+from pydantic import BaseModel
+from ai_products.domains.ai.ai_request_data.ai_request_data import AiRequestData
+from ai_products.domains.ai.ai_request_params import AiRequestParams
 from ai_products.models import AiModel, PromptInput, AiInput, AiTypeAiInput
 from ai_products.services.ai.ai_input_type_logic.ai_input_type_logic_service import (
     AiInputTypeLogicService,
@@ -12,7 +15,6 @@ from ai_products.services.ai.serializers.ai_output_converter_service import (
     AiOutputConverterService,
 )
 from typing import List, Dict, Any
-from ai_products.serializers.ai.utils.ai_serializer import AiRequestPrams
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 
 
@@ -22,20 +24,33 @@ class TaskAiService(AiServiceInterface):
         self,
         ai_model: AiModel,
         ai_type_ai_inputs: List[AiTypeAiInput],
-        params: AiRequestPrams,
+        ai_request_data: AiRequestData,
     ) -> AiAnswer:
         messages: List[SystemMessage | HumanMessage | AIMessage] = []
         functions: List[Dict[str, Any]] = []
+        output_base_model: BaseModel = None
         prompt_inputs: List[PromptInput] = []
         for ai_type_ai_input in ai_type_ai_inputs:
             ai_input: AiInput = ai_type_ai_input.ai_input
-            logic_service = AiInputTypeLogicService(ai_input=ai_input, params=params)
-            result = logic_service.result()
+            logic_service = AiInputTypeLogicService(
+                ai_input=ai_input, ai_request_data=ai_request_data
+            )
+            try:
+                result = logic_service.result()
+            except CustomApiErrorException as e:
+                raise e
+
             if result.message is not None:
                 messages.append(HumanMessage(content=result.message))
             if result.function is not None:
                 functions.append(result.function)
+            if result.output_base_model is not None:
+                output_base_model = result.output_base_model
             prompt_inputs = prompt_inputs + result.prompt_inputs
+
+            # output_base_modelが渡されたら,LLM実行フローに強制移動
+            if output_base_model is not None:
+                break
 
         if functions != []:
             try:
@@ -46,7 +61,7 @@ class TaskAiService(AiServiceInterface):
                 converter_service = AiOutputConverterService()
                 output_model = converter_service.function_call_arguments_to_dict(
                     additional_kwargs=result.additional_kwargs,
-                    output_model_class=params.output_model_class,
+                    output_base_model=output_base_model,
                 )
             except CustomApiErrorException as e:
                 return AiAnswer(

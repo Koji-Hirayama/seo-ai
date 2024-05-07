@@ -82,10 +82,11 @@ class ErrorType(_BaseErrorTypeEnum):
         "E1102",
         _ErrorStatus.BAD_REQUEST,
     )
+    AI_OUTPUT_PYDANTIC_MODEL_BAD_REQUEST = ("E1103", _ErrorStatus.BAD_REQUEST)
     # ===================================
-    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E1100番台にする
-    CREATE_PROMPT_BAD_REQUEST = ("E1101", _ErrorStatus.BAD_REQUEST)
-    CREATE_PROMPT_OUTPUT_BAD_REQUEST = ("E1102", _ErrorStatus.BAD_REQUEST)
+    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E1200番台にする
+    CREATE_PROMPT_BAD_REQUEST = ("E1201", _ErrorStatus.BAD_REQUEST)
+    CREATE_PROMPT_OUTPUT_BAD_REQUEST = ("E1202", _ErrorStatus.BAD_REQUEST)
 
     # =============================
     # 404 NOT_FOUND系はE2000番台。
@@ -97,14 +98,18 @@ class ErrorType(_BaseErrorTypeEnum):
     AI_MODEL_NOT_FOUND = ("E2004", _ErrorStatus.NOT_FOUND)
     AI_TYPE_AI_INPUT_NOT_FOUND = ("E2005", _ErrorStatus.NOT_FOUND)
     AI_INPUT_FIELD_NOT_FOUND = ("E2006", _ErrorStatus.NOT_FOUND)
+    WORK_NOT_FOUND = ("E2007", _ErrorStatus.NOT_FOUND)
+    # 対象がAIに関する場合は、E2100番台にする。
     # ===================================
-    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E2100番台にする
-    CREATE_TASK_ELEMENT_NOT_FOUND = ("E2101", _ErrorStatus.NOT_FOUND)
-    CREATE_WORK_ELEMENT_NOT_FOUND = ("E2102", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_ELEMENT_NOT_FOUND = ("E2103", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_OUTPUT_ELEMENT_NOT_FOUND = ("E2104", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_INPUTS_NOT_FOUND = ("E2105", _ErrorStatus.NOT_FOUND)
-    CREATE_PROMPT_INPUT_RESULTS_NOT_FOUND = ("E2106", _ErrorStatus.NOT_FOUND)
+    AI_REQUEST_INPUT_DATA_NOT_FOUND = ("E2101", _ErrorStatus.NOT_FOUND)
+    # ===================================
+    # 対象がModelの操作(CRUD)に必要なリソースを必要とした処理を意味してる場合は、E2200番台にする
+    CREATE_TASK_ELEMENT_NOT_FOUND = ("E2201", _ErrorStatus.NOT_FOUND)
+    CREATE_WORK_ELEMENT_NOT_FOUND = ("E2202", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_ELEMENT_NOT_FOUND = ("E2203", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_OUTPUT_ELEMENT_NOT_FOUND = ("E2204", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_INPUTS_NOT_FOUND = ("E2205", _ErrorStatus.NOT_FOUND)
+    CREATE_PROMPT_INPUT_RESULTS_NOT_FOUND = ("E2206", _ErrorStatus.NOT_FOUND)
 
     # =============================
     # 403 FORBIDDEN系はE3000番台。

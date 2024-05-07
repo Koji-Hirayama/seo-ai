@@ -21,3 +21,4 @@ from .ai_input_type import AiInputType
 from .ai_input_field_type import AiInputFieldType
 from .ai_input_type_ai_input_field_type import AiInputTypeAiInputFieldType
 from .prompt_input import PromptInput
+from .ai_request import AiRequest

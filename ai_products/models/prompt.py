@@ -2,10 +2,14 @@ from django.db import models
 from .work import Work
 from .user import User
 from .ai_model import AiModel
+from .ai_request import AiRequest
 import datetime
 
 
 class Prompt(models.Model):
+    ai_request = models.ForeignKey(
+        AiRequest, on_delete=models.CASCADE, related_name="prompts"
+    )
     prompt = models.TextField(blank=True)
     output_example_model_description = models.CharField(max_length=255, blank=True)
     output_example_model = models.JSONField(blank=True, null=True)

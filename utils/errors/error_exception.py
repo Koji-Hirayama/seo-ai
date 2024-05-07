@@ -158,7 +158,7 @@ class CustomApiException(APIException):
         """
         DRF例外処理クラス(try-exceptを明示的に行わずに、自動的にResponseが作成される)
         """
-        error = _Error(
+        error = Error(
             status=error_type.get_http_status(),
             error=error_type.get_error(),
             error_type=error_type.get_error_type(),

@@ -1,3 +1,4 @@
+from ai_products.domains.ai.ai_request_data.scraping_prompt import ScrapingPrompt
 from ai_products.services.ai.interface.ai_input_type_logic_interface import (
     AiInputTypeLogicInterface,
     AiInputTypeLogicResult,
@@ -16,37 +17,25 @@ from typing import List
 
 class ScrapingPromptLogic(AiInputTypeLogicInterface):
 
-    def __init__(
-        self,
-        ai_input: AiInput,
-        urls: List[str],
-        user_input: str,
-    ):
-        super().__init__(ai_input)
-        self.urls = urls
-        self.user_input = user_input
-
-    def result(self) -> AiInputTypeLogicResult:
+    def result(
+        self, ai_input: AiInput, input_data: ScrapingPrompt
+    ) -> AiInputTypeLogicResult:
         # ①スクレイピング結果取得
         scraping_result_service = GetScrapingResultsService()
-        scraping_results = scraping_result_service.get_results(self.urls)
+        scraping_results = scraping_result_service.get_results(input_data.urls)
         # スクレイピング結果のpromptInputとResultsを作成
-        ai_input_field: AiInputField = (
-            self.ai_input.get_ai_input_field_by_field_type_id(1)
-        )
+        ai_input_field: AiInputField = ai_input.get_ai_input_field_by_field_type_id(1)
         scraping_inputs = self.create_scraping_results_prompt_inputs(
-            ai_input_id=self.ai_input.id,
+            ai_input_id=ai_input.id,
             ai_input_field_id=ai_input_field.id,
             scraping_results=scraping_results,
         )
 
         # ②取得したスクレイピング結果と指示文を元にプロンプト作成する。
-        ai_input_field: AiInputField = (
-            self.ai_input.get_ai_input_field_by_field_type_id(2)
-        )
+        ai_input_field: AiInputField = ai_input.get_ai_input_field_by_field_type_id(2)
         scraping_prompt_message_service = GetScrapingPromptMessageService(
             context_input_field=ai_input_field,
-            input=self.user_input,
+            input=input_data.input,
         )
         message = scraping_prompt_message_service.get_scraping_result_injection_message(
             scraping_results=scraping_results
@@ -54,9 +43,9 @@ class ScrapingPromptLogic(AiInputTypeLogicInterface):
 
         # 上記で作成されたプロンプトのpromptInputを作成
         prompt_inputs = self.create_scraping_result_injection_prompt_inputs(
-            ai_input_id=self.ai_input.id,
+            ai_input_id=ai_input.id,
             ai_input_field_id=ai_input_field.id,
-            user_input=self.user_input,
+            user_input=input_data.input,
             result_injection=scraping_prompt_message_service.join_scraping_results_as_text(
                 scraping_results=scraping_results
             ),
